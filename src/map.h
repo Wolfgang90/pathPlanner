@@ -20,7 +20,7 @@ class Map {
 
   public:
     explicit Map(string map_file);
-    void print_map_values();
+    friend std::ostream& operator<<(std::ostream& os, const Map &map);
 };
 
 #endif

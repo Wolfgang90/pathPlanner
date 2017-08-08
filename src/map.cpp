@@ -26,9 +26,13 @@ Map::Map(string map_file_){
 }
 
 
-void Map::print_map_values(){
-  cout << "Current map values: " << endl;
-  for (int i = 0; i < n; i++){
-    cout << "Waypoint " << i << ": " << x[i] << ", " << y[i] << ", " << s[i] << ", " << dx[i] << ", " << dy[i] << endl;
+std::ostream& operator<<(std::ostream& os, const Map &map){
+  os << "Current map values: " << endl;
+  for (int i = 0; i < map.n; i++){
+    os << "Waypoint " << i+1 << ": " << map.x[i] << ", " << map.y[i] << ", " << map.s[i] << ", " << map.dx[i] << ", " << map.dy[i] << endl;
   }
+  os << endl;  
+  os << "Total number of waypoints: " << map.n << endl;
+  os << "--------------------" << endl;
+  return os;
 }

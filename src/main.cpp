@@ -171,7 +171,7 @@ int main() {
 
   Map track(map_file_);
   
-  track.print_map_values();
+  cout << track;
 
   Car ego_car;
 
@@ -202,10 +202,9 @@ int main() {
         if (event == "telemetry") {
           // j[1] is the data JSON object
           
-            ego_car.update_current_status(j[1]["x"], j[1]["y"],j[1]["s"],j[1]["d"], j[1]["yaw"], j[1]["speed"]); 
+            ego_car.update_current_status(j[1]["x"], j[1]["y"],j[1]["s"],j[1]["d"], j[1]["yaw"], j[1]["speed"],j[1]["previous_path_x"],j[1]["previous_path_y"]); 
             
-            
-            ego_car.print_car_values();
+            cout << ego_car;
 
             //ego_car.update_current_status( 1.0, 1.0, 1.0, 1.0, 1.0, 1.0); 
 

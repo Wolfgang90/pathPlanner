@@ -18,12 +18,14 @@ class Car {
     double d;
     double yaw;
     double speed;
+    vector<vector<double>> previous_path;
+    int previous_path_points;
     //vector<vector<double>> previous_path;
   public:
     Car();
-    void update_current_status(double x_, double y_, double s_, double d_, double yaw_, double speed_);
+    void update_current_status(double x_, double y_, double s_, double d_, double yaw_, double speed_, vector<double> previous_path_x_, vector<double> previous_path_y_);
 //    void update_previous_path(vector<vector<double>> previous_path_); 
-    void print_car_values();
+    friend std::ostream& operator<<(std::ostream& os, const Car &car);
 };
 
 #endif
