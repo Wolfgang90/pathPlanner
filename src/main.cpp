@@ -9,6 +9,7 @@
 #include "Eigen-3.3/Eigen/QR"
 #include "json.hpp"
 #include "map.h"
+#include "car.h"
 
 using namespace std;
 
@@ -169,6 +170,10 @@ int main() {
   double max_s = 6945.554;
 
   Map track(map_file_);
+  
+  track.print_map_values();
+
+  Car ego_car;
 
   /*
   for(auto i = track.x.begin(); i != track.x.end(); ++i){
@@ -178,7 +183,7 @@ int main() {
   cout << "--------------------" << endl;
   */
 
-  h.onMessage([&track](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,
+  h.onMessage([&track,&ego_car](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,
                      uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
     // The 4 signifies a websocket message
@@ -197,13 +202,12 @@ int main() {
         if (event == "telemetry") {
           // j[1] is the data JSON object
           
-        	// Main car's localization Data
-          	double car_x = j[1]["x"];
-          	double car_y = j[1]["y"];
-          	double car_s = j[1]["s"];
-          	double car_d = j[1]["d"];
-          	double car_yaw = j[1]["yaw"];
-          	double car_speed = j[1]["speed"];
+            ego_car.update_current_status(j[1]["x"], j[1]["y"],j[1]["s"],j[1]["d"], j[1]["yaw"], j[1]["speed"]); 
+            
+            
+            ego_car.print_car_values();
+
+            //ego_car.update_current_status( 1.0, 1.0, 1.0, 1.0, 1.0, 1.0); 
 
           	// Previous path data given to the Planner
           	auto previous_path_x = j[1]["previous_path_x"];

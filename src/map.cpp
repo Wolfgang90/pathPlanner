@@ -22,4 +22,13 @@ Map::Map(string map_file_){
   	dx.push_back(dx_cur);
   	dy.push_back(dy_cur);
   }
+  n = x.size();
+}
+
+
+void Map::print_map_values(){
+  cout << "Current map values: " << endl;
+  for (int i = 0; i < n; i++){
+    cout << "Waypoint " << i << ": " << x[i] << ", " << y[i] << ", " << s[i] << ", " << dx[i] << ", " << dy[i] << endl;
+  }
 }

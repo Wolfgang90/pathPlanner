@@ -16,9 +16,11 @@ class Map {
     vector<double> s;
     vector<double> dx;
     vector<double> dy;
+    double n;
 
   public:
     explicit Map(string map_file);
+    void print_map_values();
 };
 
 #endif
