@@ -20,7 +20,6 @@ class Car {
     double speed;
     vector<vector<double>> previous_path;
     int previous_path_points;
-    //vector<vector<double>> previous_path;
   public:
     Car();
     void update_current_status(double x_, double y_, double s_, double d_, double yaw_, double speed_, vector<double> previous_path_x_, vector<double> previous_path_y_);

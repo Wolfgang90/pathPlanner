@@ -11,6 +11,7 @@ set(sources
   src/main.cpp
   src/map.cpp
   src/car.cpp
+  src/trajectory_generator.cpp
   )
 
 

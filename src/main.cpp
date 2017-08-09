@@ -10,6 +10,7 @@
 #include "json.hpp"
 #include "map.h"
 #include "car.h"
+#include "trajectory_generator.h"
 
 using namespace std;
 
@@ -174,6 +175,8 @@ int main() {
   cout << track;
 
   Car ego_car;
+
+  Trajectory_generator trajectory(track);
 
   /*
   for(auto i = track.x.begin(); i != track.x.end(); ++i){
