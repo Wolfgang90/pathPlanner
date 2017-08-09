@@ -12,7 +12,7 @@
 using namespace std;
 
 class Car {
-  private:
+  public:
     double x;
     double y;
     double s;
@@ -22,7 +22,7 @@ class Car {
     double speed;
     vector<vector<double>> previous_path;
     int previous_path_points;
-  public:
+
     Car();
     void update_current_status(double x_, double y_, double s_, double d_, double yaw_deg_, double speed_, vector<double> previous_path_x_, vector<double> previous_path_y_);
 //    void update_previous_path(vector<vector<double>> previous_path_); 
