@@ -10,7 +10,7 @@
 using namespace std;
 
 class Map {
-  private:
+  public:
     vector<double> x;
     vector<double> y;
     vector<double> s;
@@ -18,7 +18,6 @@ class Map {
     vector<double> dy;
     double n;
 
-  public:
     explicit Map(string map_file);
     friend std::ostream& operator<<(std::ostream& os, const Map &map);
 };

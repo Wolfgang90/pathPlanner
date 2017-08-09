@@ -20,20 +20,19 @@ void Car::update_current_status(double x_, double y_, double s_, double d_, doub
   yaw_rad = deg2rad(yaw_deg_);
   speed = speed_;
 
-  vector<vector<double>> previous_path = 
-  {
-    previous_path_x_,
-    previous_path_y_
-  };
-
-  previous_path_points = previous_path_x_.size();
+  previous_size = previous_path_x_.size();
+  cout << previous_size << endl;
+  if(previous_size){
+    previous_path.clear();
+    previous_path.push_back(previous_path_x_);
+    previous_path.push_back(previous_path_y_);
+  }
+  else{
+    previous_path.clear();
+  }
+  previous_size = previous_path_x_.size();
 }
 
-/*
-void Car::update_previous_path(vector<vector<double>> previous_path_){
-  previous_path = previous_path_
-}
-*/
 
 std::ostream& operator<<(std::ostream& os, const Car &car){
   os << "The values of car are:" << endl;
@@ -44,9 +43,10 @@ std::ostream& operator<<(std::ostream& os, const Car &car){
   os << "yaw_deg: " << car.yaw_deg << endl;
   os << "yaw_rad: " << car.yaw_rad << endl;
   os << "speed: " << car.speed << endl;
-  for (int i = 0; i < car.previous_path_points; i++){
+  for (int i = 0; i < car.previous_size; i++){
     os << "Step " << i+1 << ": x->  " << car.previous_path[0][i] << ", y-> " << car.previous_path[1][i] << endl;
   }
+  
   os << "--------------------------" << endl;
   return os;
 }

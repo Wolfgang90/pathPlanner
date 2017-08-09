@@ -21,7 +21,7 @@ class Car {
     double yaw_rad;
     double speed;
     vector<vector<double>> previous_path;
-    int previous_path_points;
+    int previous_size;
 
     Car();
     void update_current_status(double x_, double y_, double s_, double d_, double yaw_deg_, double speed_, vector<double> previous_path_x_, vector<double> previous_path_y_);
