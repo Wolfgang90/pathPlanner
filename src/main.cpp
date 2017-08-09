@@ -35,6 +35,9 @@ string hasData(string s) {
   }
   return "";
 }
+
+
+/*
 int ClosestWaypoint(double x, double y, vector<double> maps_x, vector<double> maps_y)
 {
 
@@ -127,6 +130,7 @@ vector<double> getFrenet(double x, double y, double theta, vector<double> maps_x
 	return {frenet_s,frenet_d};
 
 }
+*/
 
 
 int main() {
@@ -172,20 +176,16 @@ int main() {
         
         if (event == "telemetry") {
           // j[1] is the data JSON object
-  cout << "Main Checkpoint 1" << endl;
           
             ego_car.update_current_status(j[1]["x"], j[1]["y"],j[1]["s"],j[1]["d"], j[1]["yaw"], j[1]["speed"],j[1]["previous_path_x"],j[1]["previous_path_y"]); 
             
-  cout << "Main Checkpoint 1a" << endl;
             cout << ego_car;
-  cout << "Main Checkpoint 1b" << endl;
 
           	// Previous path's end s and d values 
           	double end_path_s = j[1]["end_path_s"];
           	double end_path_d = j[1]["end_path_d"];
 
           	// Sensor Fusion Data, a list of all other cars on the same side of the road.
-  cout << "Main Checkpoint 2" << endl;
           	auto sensor_fusion = j[1]["sensor_fusion"];
 
           	json msgJson;
@@ -196,13 +196,11 @@ int main() {
 
           	// TODO: define a path made up of (x,y) points that the car will visit sequentially every .02 seconds
             
-  cout << "Main Checkpoint 3" << endl;
             double target_speed = 49.5;
             int target_lane = 1;
 
             vector<vector<double>> next_vals = trajectory.generate(ego_car, target_lane, target_speed);
 
-  cout << "Main Checkpoint 4" << endl;
 
           	msgJson["next_x"] = next_vals[0];
           	msgJson["next_y"] = next_vals[1];

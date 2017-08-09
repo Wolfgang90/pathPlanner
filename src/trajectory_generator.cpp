@@ -135,5 +135,4 @@ vector<vector<double>> Trajectory_generator::generate(Car ego_car_, int target_l
   next_vals.push_back(next_x_vals);
   next_vals.push_back(next_y_vals);
   return next_vals;
-
 }

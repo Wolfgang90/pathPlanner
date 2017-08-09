@@ -12,6 +12,7 @@ set(sources
   src/map.cpp
   src/car.cpp
   src/trajectory_generator.cpp
+  src/behavioral_planner.cpp
   )
 
 
