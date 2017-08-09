@@ -19,6 +19,8 @@ using namespace std;
 // for convenience
 using json = nlohmann::json;
 
+Helper h;
+
 // Checks if the SocketIO event has JSON data.
 // If there is data the JSON object in string format will be returned,
 // else the empty string "" will be returned.
@@ -43,7 +45,7 @@ int ClosestWaypoint(double x, double y, vector<double> maps_x, vector<double> ma
 	{
 		double map_x = maps_x[i];
 		double map_y = maps_y[i];
-		double dist = distance(x,y,map_x,map_y);
+		double dist = h.distance(x,y,map_x,map_y);
 		if(dist < closestLen)
 		{
 			closestLen = dist;
@@ -99,14 +101,14 @@ vector<double> getFrenet(double x, double y, double theta, vector<double> maps_x
 	double proj_x = proj_norm*n_x;
 	double proj_y = proj_norm*n_y;
 
-	double frenet_d = distance(x_x,x_y,proj_x,proj_y);
+	double frenet_d = h.distance(x_x,x_y,proj_x,proj_y);
 
 	//see if d value is positive or negative by comparing it to a center point
 
 	double center_x = 1000-maps_x[prev_wp];
 	double center_y = 2000-maps_y[prev_wp];
-	double centerToPos = distance(center_x,center_y,x_x,x_y);
-	double centerToRef = distance(center_x,center_y,proj_x,proj_y);
+	double centerToPos = h.distance(center_x,center_y,x_x,x_y);
+	double centerToRef = h.distance(center_x,center_y,proj_x,proj_y);
 
 	if(centerToPos <= centerToRef)
 	{
@@ -117,10 +119,10 @@ vector<double> getFrenet(double x, double y, double theta, vector<double> maps_x
 	double frenet_s = 0;
 	for(int i = 0; i < prev_wp; i++)
 	{
-		frenet_s += distance(maps_x[i],maps_y[i],maps_x[i+1],maps_y[i+1]);
+		frenet_s += h.distance(maps_x[i],maps_y[i],maps_x[i+1],maps_y[i+1]);
 	}
 
-	frenet_s += distance(0,0,proj_x,proj_y);
+	frenet_s += h.distance(0,0,proj_x,proj_y);
 
 	return {frenet_s,frenet_d};
 
