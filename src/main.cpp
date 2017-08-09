@@ -11,6 +11,7 @@
 #include "map.h"
 #include "car.h"
 #include "trajectory_generator.h"
+#include "spline.h"
 
 using namespace std;
 
@@ -176,7 +177,9 @@ int main() {
 
   Car ego_car;
 
-  Trajectory_generator trajectory(track);
+  double target_speed = 49.5;
+
+  Trajectory_generator trajectory(track, target_speed);
 
   /*
   for(auto i = track.x.begin(); i != track.x.end(); ++i){

@@ -14,8 +14,9 @@ using namespace std;
 class Trajectory_generator{
   private:
     Map& track;
+    double target_speed;
   public:
-    explicit Trajectory_generator(Map& track_): track(track_) {}
+    explicit Trajectory_generator(Map& track_, double target_speed_);//: track(track_) {}
     vector<vector<double>> generate(Car ego_car_, int target_lane_);
 };
 
