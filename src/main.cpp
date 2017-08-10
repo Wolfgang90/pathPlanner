@@ -145,7 +145,7 @@ int main() {
   
   cout << track;
 
-  Car ego_car;
+  Ego ego_car(1000);
 
 
   Trajectory_generator trajectory(track);

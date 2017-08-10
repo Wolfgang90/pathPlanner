@@ -2,7 +2,7 @@
 
 Trajectory_generator::Trajectory_generator(Map& track_) : track(track_), target_speed(0.0), ref_vel(0.0), acc_factor(0.224) {};
 
-vector<vector<double>> Trajectory_generator::generate(Car ego_car_, int target_lane_, double target_speed_){
+vector<vector<double>> Trajectory_generator::generate(Ego ego_car_, int target_lane_, double target_speed_){
 
   target_speed = target_speed_;
 

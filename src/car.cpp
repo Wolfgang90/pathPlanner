@@ -1,17 +1,27 @@
 #include "car.h"
 
 Car::Car(){
+  s = 0.0;
+  s_dot = 0.0;
+  s_dotdot = 0.0;
+  d = 0.0;
+  d_dot = 0.0;
+  d_dotdot = 0.0;
+}
+
+
+//-----------------------------------------------------
+
+Ego::Ego(int id_){
+  id = id_;
   x = 0.0;
   y = 0.0;
-  s = 0.0;
-  d = 0.0;
   yaw_deg = 0.0;
   yaw_rad = 0.0;
   speed = 0.0;
 }
 
-
-void Car::update_current_status(double x_, double y_, double s_, double d_, double yaw_deg_, double speed_, vector<double> previous_path_x_, vector<double> previous_path_y_){
+void Ego::update_current_status(double x_, double y_, double s_, double d_, double yaw_deg_, double speed_, vector<double> previous_path_x_, vector<double> previous_path_y_){
   x = x_;
   y = y_;
   s = s_;
@@ -34,7 +44,7 @@ void Car::update_current_status(double x_, double y_, double s_, double d_, doub
 }
 
 
-std::ostream& operator<<(std::ostream& os, const Car &car){
+std::ostream& operator<<(std::ostream& os, const Ego &car){
   os << "The values of car are:" << endl;
   os << "x: " << car.x << endl;
   os << "y: " << car.y << endl;
@@ -50,3 +60,6 @@ std::ostream& operator<<(std::ostream& os, const Car &car){
   os << "--------------------------" << endl;
   return os;
 }
+
+
+//--------------------------------------------------------
