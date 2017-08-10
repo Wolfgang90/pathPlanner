@@ -11,6 +11,9 @@
 using namespace std;
 
 class Car {
+  protected:
+    void calculate_lane();
+
   public:
     int id;
     double x;
@@ -18,6 +21,7 @@ class Car {
     double s;
     double d;
     double speed;
+    int lane;
 
     Car();
 };

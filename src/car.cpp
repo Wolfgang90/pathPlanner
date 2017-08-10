@@ -6,8 +6,12 @@ Car::Car(){
   s = 0.0;
   d = 0.0;
   speed = 0.0;
+  lane = 0;
 }
 
+void Car::calculate_lane(){
+  lane = int(floor(d / 4.0));
+}
 
 //-----------------------------------------------------
 
@@ -37,6 +41,8 @@ void Ego::update_current_status(double x_, double y_, double s_, double d_, doub
     previous_path.clear();
   }
   previous_size = previous_path_x_.size();
+  //TODO: Calculate lane
+  calculate_lane();
 }
 
 
@@ -48,6 +54,7 @@ std::ostream& operator<<(std::ostream& os, const Ego &car){
   os << "d: " << car.d << endl;
   os << "yaw_deg: " << car.yaw_deg << endl;
   os << "yaw_rad: " << car.yaw_rad << endl;
+  os << "lane: " << car.lane << endl;
   os << "speed: " << car.speed << endl;
   for (int i = 0; i < car.previous_size; i++){
     os << "Step " << i+1 << ": x->  " << car.previous_path[0][i] << ", y-> " << car.previous_path[1][i] << endl;
@@ -67,6 +74,7 @@ Other::Other(vector<double> sensor_fusion_) {
   s = sensor_fusion_[5];
   d = sensor_fusion_[6];
   speed = sqrt(pow(sensor_fusion_[3],2) + pow(sensor_fusion_[4],2));
+  calculate_lane();
 }
 
 void Other::update(vector<double> sensor_fusion_){
@@ -75,6 +83,7 @@ void Other::update(vector<double> sensor_fusion_){
   s = sensor_fusion_[5];
   d = sensor_fusion_[6];
   speed = sqrt(pow(sensor_fusion_[3],2) + pow(sensor_fusion_[4],2));
+  calculate_lane();
 }
 
 std::ostream& operator<<(std::ostream& os, const Other &car){
@@ -84,6 +93,7 @@ std::ostream& operator<<(std::ostream& os, const Other &car){
   os << "s: " << car.s << endl;
   os << "d: " << car.d << endl;
   os << "speed: " << car.speed << endl;
+  os << "lane: " << car.lane << endl;
   
   os << "--------------------------" << endl;
   return os;
