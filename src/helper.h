@@ -2,6 +2,8 @@
 #define HELPER_H
 
 #include <math.h>
+#include <map>
+#include "car.h"
 
 using namespace std;
 
@@ -43,6 +45,13 @@ class Helper{
 
     }
 
+};
+
+class Ego;
+class Other;
+struct Status{
+  Ego* ego_car;
+  vector<Other> sensor_fusion;
 };
 
 

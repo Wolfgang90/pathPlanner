@@ -19,8 +19,9 @@ class Behavioral_planner{
     double target_speed;
   public:
     explicit Behavioral_planner();
-    void plan(Car ego_car_, vector<vector<double>> sensor_fusion_);
+    void plan(Ego ego_car_, vector<vector<double>> sensor_fusion_);
     
+    void update_cars();
     int determine_optimal_lane();
     //This will be the final state machine which checks whether the path to the optimal lane is free
     string determine_optimal_state();
