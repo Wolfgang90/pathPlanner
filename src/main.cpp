@@ -143,7 +143,7 @@ int main() {
 
   Map track(map_file_);
   
-  cout << track;
+  //cout << track;
 
   Ego ego_car(1000);
 
@@ -186,7 +186,14 @@ int main() {
           	double end_path_d = j[1]["end_path_d"];
 
           	// Sensor Fusion Data, a list of all other cars on the same side of the road.
-          	auto sensor_fusion = j[1]["sensor_fusion"];
+          	vector<vector<double>> sensor_fusion = j[1]["sensor_fusion"];
+
+            /*
+             * BEGIN: Test of Other class for sensor fusion
+            Other test_car(sensor_fusion[3]);
+            cout << test_car;
+             * END: Test of Other class for sensor fusion
+             */
 
           	json msgJson;
 

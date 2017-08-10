@@ -28,7 +28,6 @@ void Ego::update_current_status(double x_, double y_, double s_, double d_, doub
   speed = speed_;
 
   previous_size = previous_path_x_.size();
-  cout << previous_size << endl;
   if(previous_size){
     previous_path.clear();
     previous_path.push_back(previous_path_x_);
@@ -65,16 +64,16 @@ Other::Other(vector<double> sensor_fusion_) {
   id = sensor_fusion_[0];
   x = sensor_fusion_[1];
   y = sensor_fusion_[2];
-  s = sensor_fusion_[4];
-  d = sensor_fusion_[5];
+  s = sensor_fusion_[5];
+  d = sensor_fusion_[6];
   speed = sqrt(pow(sensor_fusion_[3],2) + pow(sensor_fusion_[4],2));
 }
 
 void Other::update(vector<double> sensor_fusion_){
   x = sensor_fusion_[1];
   y = sensor_fusion_[2];
-  s = sensor_fusion_[4];
-  d = sensor_fusion_[5];
+  s = sensor_fusion_[5];
+  d = sensor_fusion_[6];
   speed = sqrt(pow(sensor_fusion_[3],2) + pow(sensor_fusion_[4],2));
 }
 
