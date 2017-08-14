@@ -18,8 +18,7 @@ class Behavioral_planner{
     int target_lane;
     double target_speed;
   public:
-    explicit Behavioral_planner();
-    void plan(Ego ego_car_, vector<vector<double>> sensor_fusion_);
+    explicit Behavioral_planner(Ego ego_car_, vector<vector<double>> sensor_fusion_);
     
     void update_cars();
     int determine_optimal_lane();

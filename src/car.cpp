@@ -45,12 +45,17 @@ void Ego::update_current_status(double x_, double y_, double s_, double d_, doub
   calculate_lane();
 }
 
+void Ego::predict(double dt){
+  s_predicted = s + speed/2.24 * dt;
+}
+
 
 std::ostream& operator<<(std::ostream& os, const Ego &car){
   os << "The values of car are:" << endl;
   os << "x: " << car.x << endl;
   os << "y: " << car.y << endl;
   os << "s: " << car.s << endl;
+  os << "s_predicted: " << car.s_predicted << endl;
   os << "d: " << car.d << endl;
   os << "yaw_deg: " << car.yaw_deg << endl;
   os << "yaw_rad: " << car.yaw_rad << endl;
@@ -86,11 +91,16 @@ void Other::update(vector<double> sensor_fusion_){
   calculate_lane();
 }
 
+void Other::predict(double dt){
+  s_predicted = s + speed/2.24 * dt;
+}
+
 std::ostream& operator<<(std::ostream& os, const Other &car){
   os << "The values of car " << car.id << "  are:" << endl;
   os << "x: " << car.x << endl;
   os << "y: " << car.y << endl;
   os << "s: " << car.s << endl;
+  os << "s_predicted: " << car.s_predicted << endl;
   os << "d: " << car.d << endl;
   os << "speed: " << car.speed << endl;
   os << "lane: " << car.lane << endl;

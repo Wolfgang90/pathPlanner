@@ -11,6 +11,7 @@
 #include "map.h"
 #include "car.h"
 #include "trajectory_generator.h"
+#include "prediction.h"
 #include "helper.h"
 #include "spline.h"
 
@@ -179,7 +180,7 @@ int main() {
           
             ego_car.update_current_status(j[1]["x"], j[1]["y"],j[1]["s"],j[1]["d"], j[1]["yaw"], j[1]["speed"],j[1]["previous_path_x"],j[1]["previous_path_y"]); 
             
-            cout << ego_car;
+            //cout << ego_car;
 
           	// Previous path's end s and d values 
           	double end_path_s = j[1]["end_path_s"];
@@ -188,10 +189,23 @@ int main() {
           	// Sensor Fusion Data, a list of all other cars on the same side of the road.
           	vector<vector<double>> sensor_fusion = j[1]["sensor_fusion"];
 
+
+
+            // Look in the future -> 1s
+            double dt_pred = 1;
+            ego_car.predict(dt_pred);
+            cout << "Car prediction: " << endl;
+            //cout << ego_car;
+
+
+
             /*
              * BEGIN: Test of Other class for sensor fusion
+             */
             Other test_car(sensor_fusion[3]);
+            test_car.predict(dt_pred);
             cout << test_car;
+            /*
              * END: Test of Other class for sensor fusion
              */
 
