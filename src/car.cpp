@@ -7,6 +7,8 @@ Car::Car(){
   d = 0.0;
   speed = 0.0;
   lane = 0;
+  // The max s value before wrapping around the track back to 0
+  max_s = 6945.554;
 }
 
 void Car::calculate_lane(){
@@ -46,7 +48,7 @@ void Ego::update_current_status(double x_, double y_, double s_, double d_, doub
 }
 
 void Ego::predict(double dt){
-  s_predicted = s + speed/2.24 * dt;
+  s_predicted = fmod(s + speed/2.24 * dt,max_s);
 }
 
 
@@ -92,7 +94,7 @@ void Other::update(vector<double> sensor_fusion_){
 }
 
 void Other::predict(double dt){
-  s_predicted = s + speed/2.24 * dt;
+  s_predicted = fmod(s + speed/2.24 * dt,max_s);
 }
 
 std::ostream& operator<<(std::ostream& os, const Other &car){

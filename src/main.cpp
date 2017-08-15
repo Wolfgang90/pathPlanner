@@ -11,7 +11,7 @@
 #include "map.h"
 #include "car.h"
 #include "trajectory_generator.h"
-#include "prediction.h"
+#include "behavioral_planner.h"
 #include "helper.h"
 #include "spline.h"
 
@@ -187,25 +187,27 @@ int main() {
           	double end_path_d = j[1]["end_path_d"];
 
           	// Sensor Fusion Data, a list of all other cars on the same side of the road.
-          	vector<vector<double>> sensor_fusion = j[1]["sensor_fusion"];
+          	//vector<vector<double>> sensor_fusion = j[1]["sensor_fusion"];
+
+            Behavioral_planner(ego_car,j[1]["sensor_fusion"]);
 
 
-
+            
+            /*
             // Look in the future -> 1s
             double dt_pred = 1;
             ego_car.predict(dt_pred);
             cout << "Car prediction: " << endl;
             //cout << ego_car;
+            */
 
 
 
             /*
              * BEGIN: Test of Other class for sensor fusion
-             */
             Other test_car(sensor_fusion[3]);
             test_car.predict(dt_pred);
             cout << test_car;
-            /*
              * END: Test of Other class for sensor fusion
              */
 

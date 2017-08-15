@@ -6,6 +6,7 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
+#include <math.h>
 #include "helper.h"
 
 using namespace std;
@@ -23,6 +24,7 @@ class Car {
     double d;
     double speed;
     int lane;
+    double max_s;
 
     Car();
 };

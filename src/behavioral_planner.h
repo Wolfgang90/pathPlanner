@@ -4,22 +4,25 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <map>
 #include <fstream>
 #include <sstream>
+#include "car.h"
 
 using namespace std;
 
 class Behavioral_planner{
   private:
     Car ego_car;
-    vector<vector<double>> sensor_fusion;
+    vector<int> other_cars_tracker;
+    vector<Other> other_cars;
     string state;
     int optimal_lane;
     int target_lane;
     double target_speed;
+
   public:
     explicit Behavioral_planner(Ego ego_car_, vector<vector<double>> sensor_fusion_);
-    
     void update_cars();
     int determine_optimal_lane();
     //This will be the final state machine which checks whether the path to the optimal lane is free
@@ -28,6 +31,9 @@ class Behavioral_planner{
     double determine_target_speed();
     int get_target_lane();
     double get_target_speed();
+
+    friend class Ego;
+    friend class Other;
 };
 
 #endif
