@@ -24,7 +24,7 @@ Ego::Ego(int id_){
   speed = 0.0;
 }
 
-void Ego::update_current_status(double x_, double y_, double s_, double d_, double yaw_deg_, double speed_, vector<double> previous_path_x_, vector<double> previous_path_y_){
+void Ego::update(double x_, double y_, double s_, double d_, double yaw_deg_, double speed_, vector<double> previous_path_x_, vector<double> previous_path_y_){
   x = x_;
   y = y_;
   s = s_;

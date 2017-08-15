@@ -37,7 +37,7 @@ class Ego : public Car {
     int previous_size;
 
     Ego(int id_);
-    void update_current_status(double x_, double y_, double s_, double d_, double yaw_deg_, double speed_, vector<double> previous_path_x_, vector<double> previous_path_y_);
+    void update(double x_, double y_, double s_, double d_, double yaw_deg_, double speed_, vector<double> previous_path_x_, vector<double> previous_path_y_);
     void predict(double dt);
     friend std::ostream& operator<<(std::ostream& os, const Ego &car);
 };

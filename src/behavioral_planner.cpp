@@ -23,3 +23,7 @@ Behavioral_planner::Planned Behavioral_planner::plan(){
    */
   return planned;
 }
+
+//Behavioral_planner::update_cars(){
+  //ego_car
+//}
