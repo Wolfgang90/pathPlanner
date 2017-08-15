@@ -13,7 +13,6 @@ set(sources
   src/car.cpp
   src/trajectory_generator.cpp
   src/behavioral_planner.cpp
-  src/prediction.cpp
   )
 
 
