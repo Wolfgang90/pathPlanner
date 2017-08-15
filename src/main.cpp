@@ -146,7 +146,7 @@ int main() {
   
   //cout << track;
 
-  Ego ego_car(1000);
+  Ego ego_car;
 
 
   Trajectory_generator trajectory(track);

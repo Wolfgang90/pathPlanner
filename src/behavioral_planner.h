@@ -13,10 +13,11 @@ using namespace std;
 
 class Behavioral_planner{
   private:
-    Car ego_car;
+    Ego ego_car;
     vector<int> other_cars_tracker;
     vector<Other> other_cars;
     double maximum_speed;
+    double dt;
     string state;
     int optimal_lane;
     int target_lane;

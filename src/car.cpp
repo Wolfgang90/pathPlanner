@@ -17,8 +17,8 @@ void Car::calculate_lane(){
 
 //-----------------------------------------------------
 
-Ego::Ego(int id_){
-  id = id_;
+Ego::Ego(){
+  id = 1000;
   yaw_deg = 0.0;
   yaw_rad = 0.0;
   speed = 0.0;
