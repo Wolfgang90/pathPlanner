@@ -205,7 +205,7 @@ int main() {
             /*
              * BEGIN: Test of Other class for sensor fusion
             Other test_car(sensor_fusion[3]);
-            test_car.predict(dt_pred);
+            test_car.edict(dt_pred);
             cout << test_car;
              * END: Test of Other class for sensor fusion
              */
