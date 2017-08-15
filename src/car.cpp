@@ -43,7 +43,6 @@ void Ego::update(double x_, double y_, double s_, double d_, double yaw_deg_, do
     previous_path.clear();
   }
   previous_size = previous_path_x_.size();
-  //TODO: Calculate lane
   calculate_lane();
 }
 

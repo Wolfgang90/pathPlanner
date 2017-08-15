@@ -26,7 +26,7 @@ Behavioral_planner::Planned Behavioral_planner::plan(){
   //cout << "ego_car.s_predictions[2]: " << ego_car.s_predictions[2] << endl;
   //cout << "2 :" << other_cars[2].s_predictions[dt[0]] << endl;
   //cout << other_cars[1];
-  map<int,double> lane_costs = determine_lane_costs();
+  map<int,double> lane_cost = determine_lane_costs();
   /*
    * BEGIN: Simple return values
    */
@@ -50,7 +50,7 @@ void Behavioral_planner::update_cars(){
 }
 
 map<int,double> Behavioral_planner::determine_lane_costs(){
-  map<int,double> lane_cost;
+  map<int,double> lane_cost{{0,0.0},{1,0.0},{2,0.0}};
   for(int i = 0; i < dt.size(); i++){
     //cout << "test 1" << endl;
     double ego_car_s = ego_car.s_predictions[dt[i]];
@@ -58,6 +58,8 @@ map<int,double> Behavioral_planner::determine_lane_costs(){
 
     // Map to get closest cars in front for each lane; lane -> distance from ego to closest car in front
     map<int,double> car_in_front{{0,max_s},{1,max_s},{2,max_s}};
+    // Speed gap between car in front and maximum speed
+    map<int,double> speedgap_in_front{{0,maximum_speed},{1,maximum_speed},{2,maximum_speed}};
     for (int j = 0; j < other_cars.size(); j++){
       //cout << "test 2" << endl;
       // Extract required parameters for simplification
@@ -84,7 +86,10 @@ map<int,double> Behavioral_planner::determine_lane_costs(){
       if(other_car_s > ego_car_s){
         //cout << "reduction for " << j << endl;
         double gap = other_car_s - ego_car_s;
-        if(gap < car_in_front[lane]){car_in_front[lane] = gap;}
+        if(gap < car_in_front[lane]){
+          car_in_front[lane] = gap;
+          speedgap_in_front[lane] = maximum_speed - other_cars[j].speed;
+        }
       }
       //cout << "Ego: " << ego_car_s << endl;
       //cout << "Other: " << other_car_s << endl;
@@ -98,15 +103,23 @@ map<int,double> Behavioral_planner::determine_lane_costs(){
       // Get costs for lanes on the left
     }
 
-  cout << "Lane 0 " << car_in_front[0] << endl;
-  cout << "Lane 1 " << car_in_front[1] << endl;
-  cout << "Lane 2 " << car_in_front[2] << endl;
+  for (auto const& lane_label: lane_cost){
+    cout << "lane_label.first: " << lane_label.first << endl;
+    lane_cost[lane_label.first] += dt_weights[i] * speedgap_in_front[lane_label.first] / car_in_front[lane_label.first];
+  }
+
+  //cout << "Lane 0 " << car_in_front[0] << endl;
+  //cout << "Lane 1 " << car_in_front[1] << endl;
+  //cout << "Lane 2 " << car_in_front[2] << endl;
+  cout << "Lane 0 cost: " << lane_cost[0] << endl;
+  cout << "Lane 1 cost: " << lane_cost[1] << endl;
+  cout << "Lane 2 cost: " << lane_cost[2] << endl;
   }
 
   /*
    * BEGIN: Simple lane_cost
    */
-   lane_cost = {{0,10.0}, {1,11.0}, {2,12.0}};
+   //lane_cost = {{0,10.0}, {1,11.0}, {2,12.0}};
   /*
    * END: Simple lane_cost
    */
