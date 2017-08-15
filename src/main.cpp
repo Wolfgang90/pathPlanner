@@ -189,7 +189,6 @@ int main() {
           	// Sensor Fusion Data, a list of all other cars on the same side of the road.
           	//vector<vector<double>> sensor_fusion = j[1]["sensor_fusion"];
 
-            Behavioral_planner(ego_car,j[1]["sensor_fusion"]);
 
 
             
@@ -219,10 +218,11 @@ int main() {
 
           	// TODO: define a path made up of (x,y) points that the car will visit sequentially every .02 seconds
             
-            double target_speed = 49.5;
-            int target_lane = 1;
+            Behavioral_planner behavioral_planner(ego_car,j[1]["sensor_fusion"]);
 
-            vector<vector<double>> next_vals = trajectory.generate(ego_car, target_lane, target_speed);
+            Behavioral_planner::Planned planned = behavioral_planner.plan();
+
+            vector<vector<double>> next_vals = trajectory.generate(ego_car, planned.lane, planned.speed);
 
 
           	msgJson["next_x"] = next_vals[0];

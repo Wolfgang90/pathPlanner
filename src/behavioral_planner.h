@@ -16,13 +16,20 @@ class Behavioral_planner{
     Car ego_car;
     vector<int> other_cars_tracker;
     vector<Other> other_cars;
+    double maximum_speed;
     string state;
     int optimal_lane;
     int target_lane;
     double target_speed;
 
   public:
+    struct Planned{
+      int lane;
+      double speed;
+    };
+
     explicit Behavioral_planner(Ego ego_car_, vector<vector<double>> sensor_fusion_);
+    Planned plan();
     void update_cars();
     int determine_optimal_lane();
     //This will be the final state machine which checks whether the path to the optimal lane is free
