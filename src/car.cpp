@@ -48,7 +48,7 @@ void Ego::update(double x_, double y_, double s_, double d_, double yaw_deg_, do
 }
 
 void Ego::predict(double dt){
-  s_predicted = fmod(s + speed/2.24 * dt,max_s);
+  s_predictions[dt] = fmod(s + speed/2.24 * dt,max_s);
 }
 
 
@@ -57,7 +57,10 @@ std::ostream& operator<<(std::ostream& os, const Ego &car){
   os << "x: " << car.x << endl;
   os << "y: " << car.y << endl;
   os << "s: " << car.s << endl;
-  os << "s_predicted: " << car.s_predicted << endl;
+  os << "s_predictions: " << endl;
+  for (auto const& s_pred: car.s_predictions){
+    os << s_pred.first << ":" << s_pred.second << endl;
+  }
   os << "d: " << car.d << endl;
   os << "yaw_deg: " << car.yaw_deg << endl;
   os << "yaw_rad: " << car.yaw_rad << endl;
@@ -94,7 +97,7 @@ void Other::update(vector<double> sensor_fusion_){
 }
 
 void Other::predict(double dt){
-  s_predicted = fmod(s + speed/2.24 * dt,max_s);
+  s_predictions[dt] = fmod(s + speed/2.24 * dt,max_s);
 }
 
 std::ostream& operator<<(std::ostream& os, const Other &car){
@@ -102,7 +105,10 @@ std::ostream& operator<<(std::ostream& os, const Other &car){
   os << "x: " << car.x << endl;
   os << "y: " << car.y << endl;
   os << "s: " << car.s << endl;
-  os << "s_predicted: " << car.s_predicted << endl;
+  os << "s_predictions: " << endl;
+  for (auto const& s_pred: car.s_predictions){
+    os << s_pred.first << ":" << s_pred.second << endl;
+  }
   os << "d: " << car.d << endl;
   os << "speed: " << car.speed << endl;
   os << "lane: " << car.lane << endl;

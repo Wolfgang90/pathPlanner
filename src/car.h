@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <map>
 #include <fstream>
 #include <sstream>
 #include <math.h>
@@ -20,7 +21,7 @@ class Car {
     double x;
     double y;
     double s;
-    double s_predicted;
+    map<double,double> s_predictions;
     double d;
     double speed;
     int lane;

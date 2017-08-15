@@ -4,7 +4,7 @@ Behavioral_planner::Behavioral_planner(Ego ego_car_, vector<vector<double>> sens
   // Maximum speed of the car in MPH
   maximum_speed = 49.5;
   // Time of prediction in the future
-  dt = 1.0;
+  dt = {1.0};
   ego_car = ego_car_;
   for(int i = 0; i < sensor_fusion_.size(); i++){
     Other car(sensor_fusion_[i]);
@@ -17,7 +17,8 @@ Behavioral_planner::Behavioral_planner(Ego ego_car_, vector<vector<double>> sens
 Behavioral_planner::Planned Behavioral_planner::plan(){
   //cout << "1 :" << other_cars[2].s << endl;
   update_cars();
-  //cout << "2 :" << other_cars[2].s_predicted << endl;
+  //cout << "2 :" << other_cars[2].s_predictions[dt[0]] << endl;
+  cout << other_cars[1];
   /*
    * BEGIN: Simple return values
    */
@@ -31,8 +32,10 @@ Behavioral_planner::Planned Behavioral_planner::plan(){
 }
 
 void Behavioral_planner::update_cars(){
-  ego_car.predict(dt);
-  for(int i = 0; i < other_cars.size(); i++){
-    other_cars[i].predict(dt);
+  for(int i = 0; i < dt.size(); i++){
+    ego_car.predict(dt[i]);
+    for(int j = 0; j < other_cars.size(); j++){
+      other_cars[j].predict(dt[i]);
+    }
   }
 }

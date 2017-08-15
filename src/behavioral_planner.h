@@ -17,7 +17,7 @@ class Behavioral_planner{
     vector<int> other_cars_tracker;
     vector<Other> other_cars;
     double maximum_speed;
-    double dt;
+    vector<double> dt;
     string state;
     int optimal_lane;
     int target_lane;
