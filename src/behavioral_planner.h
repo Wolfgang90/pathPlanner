@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <algorithm>
 #include <fstream>
 #include <sstream>
 #include "car.h"
@@ -35,8 +36,6 @@ class Behavioral_planner{
     Planned plan();
     void update_cars();
     void determine_lane_costs();
-    int determine_optimal_lane();
-    //This will be the final state machine which checks whether the path to the optimal lane is free
     int determine_target_lane();
     double determine_target_speed();
 

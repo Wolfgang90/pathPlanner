@@ -33,11 +33,14 @@ Behavioral_planner::Planned Behavioral_planner::plan(){
   cout << "Lane 1 cost: " << lane_cost[1] << endl;
   cout << "Lane 2 cost: " << lane_cost[2] << endl;
 
+  Planned planned;
+  planned.lane = determine_target_lane();
+
   /*
    * BEGIN: Simple return values
    */
-  Planned planned;
-  planned.lane = 1;
+  //Planned planned;
+  //planned.lane = 1;
   planned.speed = maximum_speed;
   /*
    * END: Simple return values
@@ -113,4 +116,21 @@ void Behavioral_planner::determine_lane_costs(){
     }
     */
   }
+}
+
+
+
+int Behavioral_planner::determine_target_lane(){
+
+  double cost_tmp = 100000;
+  
+  for (auto const& lc: lane_cost){
+    if(lc.second < cost_tmp){
+      cost_tmp = lc.second;
+      target_lane = lc.first;
+    }
+  }
+  cout << "Target lane: " << target_lane << endl;
+
+  return target_lane;
 }
