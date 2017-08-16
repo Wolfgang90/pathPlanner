@@ -18,6 +18,7 @@ class Behavioral_planner{
     vector<Other> other_cars;
     double maximum_speed;
     int num_lanes;
+    double car_buffer;
     vector<double> dt;
     vector<double> dt_weights;
     string state;

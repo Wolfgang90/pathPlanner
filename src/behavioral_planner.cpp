@@ -6,6 +6,8 @@ Behavioral_planner::Behavioral_planner(Ego ego_car_, vector<vector<double>> sens
   maximum_speed = 49.5;
   // Number of lanes
   num_lanes = 3;
+  // Buffer value in front and behind of a car position not to be occupied by the own car
+  car_buffer = 5.0;
   // Time of prediction in the future
   dt = {1.0,2.0,3.0};
   // Weights for each prediction in the future
@@ -52,9 +54,10 @@ void Behavioral_planner::update_cars(){
 map<int,double> Behavioral_planner::determine_lane_costs(){
   map<int,double> lane_cost{{0,0.0},{1,0.0},{2,0.0}};
   for(int i = 0; i < dt.size(); i++){
-    //cout << "test 1" << endl;
     double ego_car_s = ego_car.s_predictions[dt[i]];
-    //cout << ego_car;
+    // Safety space in which no other car should be
+    double safety_begin = ego_car_s - car_buffer;
+    double safety_end = ego_car_s + car_buffer;
 
     // Map to get closest cars in front for each lane; lane -> distance from ego to closest car in front
     map<int,double> car_in_front{{0,max_s},{1,max_s},{2,max_s}};
@@ -81,28 +84,24 @@ map<int,double> Behavioral_planner::determine_lane_costs(){
       }
 
 
-      //cout << "ego_car_s: " << ego_car_s << endl;
-      //cout << "other_car_s: " << other_car_s << endl;
+      // Detremine car in front and speed gap for each lane
       if(other_car_s > ego_car_s){
-        //cout << "reduction for " << j << endl;
         double gap = other_car_s - ego_car_s;
         if(gap < car_in_front[lane]){
           car_in_front[lane] = gap;
           speedgap_in_front[lane] = maximum_speed - other_cars[j].speed;
         }
       }
-      //cout << "Ego: " << ego_car_s << endl;
-      //cout << "Other: " << other_car_s << endl;
 
-      // 1 Get costs for cars in front
-      // For each lane -> Identify closest car in front
-      // Create a function of distance to car in front and speed on the lane
+      //Add costs for car in safety space
+      if(other_car_s > safety_begin && other_car_s < safety_end){
+        lane_cost[lane] += 1000;
+      }
 
-      // 2 Get costs for cars blocking lane change
-      // Get costs for lanes on the right
-      // Get costs for lanes on the left
+
     }
 
+  // Add costs per lane for car in front
   for (auto const& lane_label: lane_cost){
     //cout << "lane_label.first: " << lane_label.first << endl;
     lane_cost[lane_label.first] += dt_weights[i] * speedgap_in_front[lane_label.first] / car_in_front[lane_label.first];
