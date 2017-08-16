@@ -12,7 +12,11 @@ Behavioral_planner::Behavioral_planner(Ego ego_car_, vector<vector<double>> sens
   dt = {1.0,2.0,3.0};
   // Weights for each prediction in the future
   dt_weights = {0.7,0.2,0.1};
+
+  map<int,double> lane_cost{{0,0.0},{1,0.0},{2,0.0}};
+
   ego_car = ego_car_;
+
   for(int i = 0; i < sensor_fusion_.size(); i++){
     Other car(sensor_fusion_[i]);
     other_cars.push_back(car);
@@ -23,7 +27,11 @@ Behavioral_planner::Planned Behavioral_planner::plan(){
 
   update_cars();
 
-  map<int,double> lane_cost = determine_lane_costs();
+  determine_lane_costs();
+
+  cout << "Lane 0 cost: " << lane_cost[0] << endl;
+  cout << "Lane 1 cost: " << lane_cost[1] << endl;
+  cout << "Lane 2 cost: " << lane_cost[2] << endl;
 
   /*
    * BEGIN: Simple return values
@@ -46,9 +54,8 @@ void Behavioral_planner::update_cars(){
   }
 }
 
-map<int,double> Behavioral_planner::determine_lane_costs(){
+void Behavioral_planner::determine_lane_costs(){
 
-  map<int,double> lane_cost{{0,0.0},{1,0.0},{2,0.0}};
 
   for(int i = 0; i < dt.size(); i++){
     
@@ -96,15 +103,14 @@ map<int,double> Behavioral_planner::determine_lane_costs(){
       }
     }
 
+    for(int k = 0; k < num_lanes; k++){
+      lane_cost[k] = lane_cost[k] + dt_weights[i] * speedgap_in_front[k] / car_in_front[k];
+    }
+    /*
     // Add costs per lane for car in front
     for (auto const& lane_label: lane_cost){
-      lane_cost[lane_label.first] += dt_weights[i] * speedgap_in_front[lane_label.first] / car_in_front[lane_label.first];
+      lane_cost[lane_label.first] +=  100 * dt_weights[i] * speedgap_in_front[lane_label.first] / car_in_front[lane_label.first];
     }
+    */
   }
-
-  cout << "Lane 0 cost: " << lane_cost[0] << endl;
-  cout << "Lane 1 cost: " << lane_cost[1] << endl;
-  cout << "Lane 2 cost: " << lane_cost[2] << endl;
-  
-  return lane_cost;
 }
