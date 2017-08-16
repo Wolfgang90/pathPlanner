@@ -122,6 +122,7 @@ void Behavioral_planner::determine_lane_costs(){
 
 int Behavioral_planner::determine_target_lane(){
 
+  // Get target lane based on lowest cost value
   double cost_tmp = 100000;
   
   for (auto const& lc: lane_cost){
@@ -131,6 +132,26 @@ int Behavioral_planner::determine_target_lane(){
     }
   }
   cout << "Target lane: " << target_lane << endl;
+
+  // Handle issues of a blocked lane in-between
+  int current_lane = ego_car.lane;
+  // If target lane to the right
+  if (target_lane > current_lane + 1){
+    for(int i = current_lane + 1; i < target_lane; i++) {
+      if(lane_cost[i]>100){
+        target_lane = i-1;
+        return target_lane;
+      }
+    }
+  // If target lane to the left
+  } else if(target_lane < current_lane-1){
+    for(int i = current_lane - 1; i > target_lane; i--) {
+      if(lane_cost[i]>100){
+        target_lane = i+1;
+        return target_lane;
+      }
+    }
+  }
 
   return target_lane;
 }
