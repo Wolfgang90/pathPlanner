@@ -17,18 +17,14 @@ Behavioral_planner::Behavioral_planner(Ego ego_car_, vector<vector<double>> sens
     Other car(sensor_fusion_[i]);
     other_cars.push_back(car);
   }
-  //cout << other_cars[3].s << endl;
 }
 
 Behavioral_planner::Planned Behavioral_planner::plan(){
-  //cout << "1 :" << other_cars[2].s << endl;
+
   update_cars();
-  //cout << "ego_car.s_predictions[0]: " << ego_car.s_predictions[0] << endl;
-  //cout << "ego_car.s_predictions[1]: " << ego_car.s_predictions[1] << endl;
-  //cout << "ego_car.s_predictions[2]: " << ego_car.s_predictions[2] << endl;
-  //cout << "2 :" << other_cars[2].s_predictions[dt[0]] << endl;
-  //cout << other_cars[1];
+
   map<int,double> lane_cost = determine_lane_costs();
+
   /*
    * BEGIN: Simple return values
    */
@@ -43,7 +39,6 @@ Behavioral_planner::Planned Behavioral_planner::plan(){
 
 void Behavioral_planner::update_cars(){
   for(int i = 0; i < dt.size(); i++){
-    //cout << "Car predict: " << i << endl;
     ego_car.predict(dt[i]);
     for(int j = 0; j < other_cars.size(); j++){
       other_cars[j].predict(dt[i]);
@@ -52,8 +47,11 @@ void Behavioral_planner::update_cars(){
 }
 
 map<int,double> Behavioral_planner::determine_lane_costs(){
+
   map<int,double> lane_cost{{0,0.0},{1,0.0},{2,0.0}};
+
   for(int i = 0; i < dt.size(); i++){
+    
     double ego_car_s = ego_car.s_predictions[dt[i]];
     // Safety space in which no other car should be
     double safety_begin = ego_car_s - car_buffer;
@@ -63,16 +61,14 @@ map<int,double> Behavioral_planner::determine_lane_costs(){
     map<int,double> car_in_front{{0,max_s},{1,max_s},{2,max_s}};
     // Speed gap between car in front and maximum speed
     map<int,double> speedgap_in_front{{0,maximum_speed},{1,maximum_speed},{2,maximum_speed}};
+
     for (int j = 0; j < other_cars.size(); j++){
-      //cout << "test 2" << endl;
+      //
       // Extract required parameters for simplification
       double other_car_s = other_cars[j].s_predictions[dt[i]];
       int lane = other_cars[j].lane;
 
-      //cout << other_cars[j];
-      //cout << "s here: " << other_car_s << endl;
-
-      // Handle lap change
+      // BEGIN: Handle lap change
       // If the other car is already in the next lap
       if(other_car_s < (ego_car_s - 1000)){
         other_car_s = other_car_s +  max_s;
@@ -82,6 +78,7 @@ map<int,double> Behavioral_planner::determine_lane_costs(){
         //cout << "still in previous lap" << endl;
         other_car_s = other_car_s - max_s;
       }
+      // END: Handle lap change
 
 
       // Detremine car in front and speed gap for each lane
@@ -97,31 +94,17 @@ map<int,double> Behavioral_planner::determine_lane_costs(){
       if(other_car_s > safety_begin && other_car_s < safety_end){
         lane_cost[lane] += 1000;
       }
-
-
     }
 
-  // Add costs per lane for car in front
-  for (auto const& lane_label: lane_cost){
-    //cout << "lane_label.first: " << lane_label.first << endl;
-    lane_cost[lane_label.first] += dt_weights[i] * speedgap_in_front[lane_label.first] / car_in_front[lane_label.first];
-  }
-
-  //cout << "Lane 0 " << car_in_front[0] << endl;
-  //cout << "Lane 1 " << car_in_front[1] << endl;
-  //cout << "Lane 2 " << car_in_front[2] << endl;
+    // Add costs per lane for car in front
+    for (auto const& lane_label: lane_cost){
+      lane_cost[lane_label.first] += dt_weights[i] * speedgap_in_front[lane_label.first] / car_in_front[lane_label.first];
+    }
   }
 
   cout << "Lane 0 cost: " << lane_cost[0] << endl;
   cout << "Lane 1 cost: " << lane_cost[1] << endl;
   cout << "Lane 2 cost: " << lane_cost[2] << endl;
-
-  /*
-   * BEGIN: Simple lane_cost
-   */
-   //lane_cost = {{0,10.0}, {1,11.0}, {2,12.0}};
-  /*
-   * END: Simple lane_cost
-   */
+  
   return lane_cost;
 }
