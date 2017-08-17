@@ -1,6 +1,6 @@
 #include "behavioral_planner.h"
 
-Behavioral_planner::Behavioral_planner(Ego ego_car_, vector<vector<double>> sensor_fusion_) {
+Behavioral_planner::Behavioral_planner(Ego &ego_car_, vector<vector<double>> sensor_fusion_) {
   max_s = 6945.554;
   // Maximum speed of the car in MPH
   maximum_speed = 49.5;
@@ -23,7 +23,9 @@ Behavioral_planner::Behavioral_planner(Ego ego_car_, vector<vector<double>> sens
   }
 }
 
-Behavioral_planner::Planned Behavioral_planner::plan(){
+Behavioral_planner::Planned Behavioral_planner::plan(int previous_target_lane_){
+
+  previous_target_lane = previous_target_lane_;
 
   update_cars();
 
@@ -118,6 +120,12 @@ void Behavioral_planner::determine_lane_costs(){
 
 
 void Behavioral_planner::determine_target_lane(){
+  // If the car seems to be in a lane change don't change the target lane identified in the last round
+  ego_car.check_lane_change();
+  if(ego_car.lane_status == "lane_change"){
+    target_lane = previous_target_lane;
+    return;
+  }
 
   // Get target lane based on lowest cost value
   double cost_tmp = 100000;

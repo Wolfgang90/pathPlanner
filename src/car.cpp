@@ -9,10 +9,21 @@ Car::Car(){
   lane = 0;
   // The max s value before wrapping around the track back to 0
   max_s = 6945.554;
+  lane_status = "in_lane";
 }
 
 void Car::calculate_lane(){
   lane = int(floor(d / 4.0));
+}
+
+void Car::check_lane_change(){
+  if(d < 1.75 || d > 10.25){
+    lane_status = "out_of_lane";
+  } else if ( d > 1.75 && d < 2.25 || d > 5.75 && d < 6.25 || d > 9.75 && d < 10.25) {
+    lane_status = "in_lane";
+  } else{
+    lane_status = "lane_change";
+  }
 }
 
 //-----------------------------------------------------
@@ -49,7 +60,6 @@ void Ego::update(double x_, double y_, double s_, double d_, double yaw_deg_, do
 void Ego::predict(double dt){
   s_predictions[dt] = fmod(s + speed/2.24 * dt,max_s);
 }
-
 
 std::ostream& operator<<(std::ostream& os, const Ego &car){
   os << "The values of car are:" << endl;

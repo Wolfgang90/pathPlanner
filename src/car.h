@@ -26,8 +26,11 @@ class Car {
     double speed;
     int lane;
     double max_s;
+    string lane_status;
 
     Car();
+
+    void check_lane_change();
 };
 
 class Ego : public Car {

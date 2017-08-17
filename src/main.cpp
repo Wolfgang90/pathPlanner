@@ -149,6 +149,8 @@ int main() {
 
   Trajectory_generator trajectory(track);
 
+  int target_lane_line = 1;
+
   /*
   for(auto i = track.x.begin(); i != track.x.end(); ++i){
     cout << *i << ' ';
@@ -157,7 +159,7 @@ int main() {
   cout << "--------------------" << endl;
   */
 
-  h.onMessage([&track,&ego_car,&trajectory](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,
+  h.onMessage([&track,&ego_car,&trajectory,&target_lane_line](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,
                      uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
     // The 4 signifies a websocket message
@@ -218,7 +220,9 @@ int main() {
             
             Behavioral_planner behavioral_planner(ego_car,j[1]["sensor_fusion"]);
 
-            Behavioral_planner::Planned planned = behavioral_planner.plan();
+            Behavioral_planner::Planned planned = behavioral_planner.plan(target_lane_line);
+            
+            target_lane_line = planned.lane;
 
             vector<vector<double>> next_vals = trajectory.generate(ego_car, planned.lane, planned.speed);
 

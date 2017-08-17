@@ -24,6 +24,7 @@ class Behavioral_planner{
     vector<double> dt_weights;
     map<int,double> lane_cost;
     int target_lane;
+    int previous_target_lane;
     double target_speed;
 
   public:
@@ -32,8 +33,8 @@ class Behavioral_planner{
       double speed;
     };
 
-    explicit Behavioral_planner(Ego ego_car_, vector<vector<double>> sensor_fusion_);
-    Planned plan();
+    explicit Behavioral_planner(Ego& ego_car_, vector<vector<double>> sensor_fusion_);
+    Planned plan(int previous_target_lane_);
     void update_cars();
     void determine_lane_costs();
     void determine_target_lane();
