@@ -36,8 +36,8 @@ class Behavioral_planner{
     Planned plan();
     void update_cars();
     void determine_lane_costs();
-    int determine_target_lane();
-    double determine_target_speed();
+    void determine_target_lane();
+    void determine_target_speed();
 
     friend class Ego;
     friend class Other;

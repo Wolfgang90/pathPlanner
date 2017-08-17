@@ -34,7 +34,8 @@ Behavioral_planner::Planned Behavioral_planner::plan(){
   cout << "Lane 2 cost: " << lane_cost[2] << endl;
 
   Planned planned;
-  planned.lane = determine_target_lane();
+  determine_target_lane();
+  planned.lane = target_lane;
 
   /*
    * BEGIN: Simple return values
@@ -116,7 +117,7 @@ void Behavioral_planner::determine_lane_costs(){
 
 
 
-int Behavioral_planner::determine_target_lane(){
+void Behavioral_planner::determine_target_lane(){
 
   // Get target lane based on lowest cost value
   double cost_tmp = 100000;
@@ -136,7 +137,7 @@ int Behavioral_planner::determine_target_lane(){
     for(int i = current_lane + 1; i < target_lane; i++) {
       if(lane_cost[i]>100){
         target_lane = i-1;
-        return target_lane;
+        return;
       }
     }
   // If target lane to the left
@@ -144,10 +145,8 @@ int Behavioral_planner::determine_target_lane(){
     for(int i = current_lane - 1; i > target_lane; i--) {
       if(lane_cost[i]>100){
         target_lane = i+1;
-        return target_lane;
+        return;
       }
     }
   }
-
-  return target_lane;
 }
