@@ -19,6 +19,7 @@ class Trajectory_generator{
     double target_speed;
     double ref_vel;
     double acc_factor;
+    double dec_factor;
   public:
     explicit Trajectory_generator(Map& track_);//: track(track_) {}
     vector<vector<double>> generate(Ego ego_car_, int target_lane_, double target_speed_);

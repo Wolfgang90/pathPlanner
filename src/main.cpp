@@ -144,10 +144,8 @@ int main() {
 
   Map track(map_file_);
   
-  //cout << track;
 
   Ego ego_car;
-
 
   Trajectory_generator trajectory(track);
 

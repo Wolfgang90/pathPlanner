@@ -1,13 +1,13 @@
 #include "trajectory_generator.h"
 
-Trajectory_generator::Trajectory_generator(Map& track_) : track(track_), target_speed(0.0), ref_vel(0.0), acc_factor(0.224) {};
+Trajectory_generator::Trajectory_generator(Map& track_) : track(track_), target_speed(0.0), ref_vel(0.0), acc_factor(1.4), dec_factor(1.4) {};
 
 vector<vector<double>> Trajectory_generator::generate(Ego ego_car_, int target_lane_, double target_speed_){
 
   target_speed = target_speed_;
 
-  if(ref_vel > target_speed + acc_factor){
-    ref_vel -= acc_factor;
+  if(ref_vel > target_speed + dec_factor){
+    ref_vel -= dec_factor;
   }
   else if(ref_vel < target_speed - acc_factor){
     ref_vel += acc_factor;
@@ -28,6 +28,8 @@ vector<vector<double>> Trajectory_generator::generate(Ego ego_car_, int target_l
   double ref_x = ego_car_.x;
   double ref_y = ego_car_.y;
   double ref_yaw = ego_car_.yaw_rad;
+
+  double ref_lane = ego_car_.lane;
 
   // if previous size is almost empty, use the car as starting reference
   if(ego_car_.previous_size < 2){
@@ -62,7 +64,14 @@ vector<vector<double>> Trajectory_generator::generate(Ego ego_car_, int target_l
 
   // In Frenet add evenly 30m spaced points ahead of the starting reference
   Helper h;
-  vector<double> next_wp0 = h.getXY(ego_car_.s + 30, (2+4*target_lane_), track.s, track.x, track.y);
+  vector<double> next_wp0;
+  if(ref_lane < target_lane_){
+    next_wp0 = h.getXY(ego_car_.s + 30, (2+4*ref_lane+0.5*4*(target_lane_-ref_lane)), track.s, track.x, track.y);
+  }else if (ref_lane > target_lane_){
+    next_wp0 = h.getXY(ego_car_.s + 30, (2+4*ref_lane+0.5*4*(ref_lane-target_lane_)), track.s, track.x, track.y);
+  } else {
+    next_wp0 = h.getXY(ego_car_.s + 30, (2+4*target_lane_), track.s, track.x, track.y);
+  }
   vector<double> next_wp1 = h.getXY(ego_car_.s + 60, (2+4*target_lane_), track.s, track.x, track.y);
   vector<double> next_wp2 = h.getXY(ego_car_.s + 90, (2+4*target_lane_), track.s, track.x, track.y);
 
