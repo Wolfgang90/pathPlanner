@@ -64,16 +64,9 @@ vector<vector<double>> Trajectory_generator::generate(Ego ego_car_, int target_l
 
   // In Frenet add evenly 30m spaced points ahead of the starting reference
   Helper h;
-  vector<double> next_wp0;
-  if(ref_lane < target_lane_){
-    next_wp0 = h.getXY(ego_car_.s + 30, (2+4*ref_lane+0.5*4*(target_lane_-ref_lane)), track.s, track.x, track.y);
-  }else if (ref_lane > target_lane_){
-    next_wp0 = h.getXY(ego_car_.s + 30, (2+4*ref_lane+0.5*4*(ref_lane-target_lane_)), track.s, track.x, track.y);
-  } else {
-    next_wp0 = h.getXY(ego_car_.s + 30, (2+4*target_lane_), track.s, track.x, track.y);
-  }
-  vector<double> next_wp1 = h.getXY(ego_car_.s + 60, (2+4*target_lane_), track.s, track.x, track.y);
-  vector<double> next_wp2 = h.getXY(ego_car_.s + 90, (2+4*target_lane_), track.s, track.x, track.y);
+  vector<double> next_wp0 = h.getXY(ego_car_.s + 50, (2+4*target_lane_), track.s, track.x, track.y);
+  vector<double> next_wp1 = h.getXY(ego_car_.s + 100, (2+4*target_lane_), track.s, track.x, track.y);
+  vector<double> next_wp2 = h.getXY(ego_car_.s + 150, (2+4*target_lane_), track.s, track.x, track.y);
 
   ptsx.push_back(next_wp0[0]);
   ptsx.push_back(next_wp1[0]);
@@ -111,7 +104,7 @@ vector<vector<double>> Trajectory_generator::generate(Ego ego_car_, int target_l
   }
 
   // calculate how to break up spline point so that we travel at our desired reference velocity
-  double target_x = 30;
+  double target_x = 50;
   double target_y = s(target_x);
   double target_dist = sqrt((target_x)*(target_x)+(target_y)*(target_y));
   
