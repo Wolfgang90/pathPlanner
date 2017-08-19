@@ -38,14 +38,9 @@ Behavioral_planner::Planned Behavioral_planner::plan(int previous_target_lane_){
   Planned planned;
   determine_target_lane();
   planned.lane = target_lane;
+  determine_target_speed();
+  planned.speed = target_speed;
 
-  /*
-   * BEGIN: Simple return values
-   */
-  planned.speed = maximum_speed;
-  /*
-   * END: Simple return values
-   */
   return planned;
 }
 
@@ -93,20 +88,6 @@ void Behavioral_planner::determine_lane_costs(){
       int lane = other_cars[j].lane;
 
       other_car_s = handle_lap_change(ego_car_s, other_car_s);
-
-      /*
-      // BEGIN: Handle lap change
-      // If the other car is already in the next lap
-      if(other_car_s < (ego_car_s - 1000)){
-        other_car_s = other_car_s +  max_s;
-
-      //If the other car is still in the previous lap
-      } else if(other_car_s > (ego_car_s + 1000)){
-        other_car_s = other_car_s - max_s;
-      }
-      // END: Handle lap change
-      */
-
 
       // Detremine car in front and speed gap for each lane
       if(other_car_s > ego_car_s){
@@ -159,15 +140,15 @@ void Behavioral_planner::determine_lane_costs(){
 
 
   for(int i = 0; i < num_lanes; i++){
-    lane_cost[i] = lane_cost[i] + cur_delta_speed[i] * 10 / cur_delta_s[i];
+    lane_cost[i] = lane_cost[i] + abs(cur_delta_speed[i]) * 10 / cur_delta_s[i];
     //In case the car is in a lane change to the right
     
     if(cur_delta_d[i] > 0.4 && (i+1) < num_lanes-1){
-      lane_cost[i+1] = lane_cost[i+1] + 4 * cur_delta_speed[i] * 10 / cur_delta_s[i];
+      lane_cost[i+1] = lane_cost[i+1] + 4 * abs(cur_delta_speed[i]) * 10 / cur_delta_s[i];
     }
     //In case the car is in a lane change to the right
     if(cur_delta_d[i] < -0.4 && (i-1) >= 0){
-      lane_cost[i-1] = lane_cost[i-1] + 4 * cur_delta_speed[i] * 10 / cur_delta_s[i];
+      lane_cost[i-1] = lane_cost[i-1] + 4 * abs(cur_delta_speed[i]) * 10 / cur_delta_s[i];
     }
   }
 }
@@ -198,7 +179,7 @@ void Behavioral_planner::determine_target_lane(){
   // If target lane to the right
   if (target_lane > current_lane + 1){
     for(int i = current_lane + 1; i < target_lane; i++) {
-      if(lane_cost[i]>100){
+      if(lane_cost[i]>100.0){
         target_lane = i-1;
         return;
       }
@@ -206,7 +187,7 @@ void Behavioral_planner::determine_target_lane(){
   // If target lane to the left
   } else if(target_lane < current_lane-1){
     for(int i = current_lane - 1; i > target_lane; i--) {
-      if(lane_cost[i]>100){
+      if(lane_cost[i]>100.0){
         target_lane = i+1;
         return;
       }
@@ -214,21 +195,21 @@ void Behavioral_planner::determine_target_lane(){
   }
 }
 
-/*
+
 void Behavioral_planner::determine_target_speed(){
-  for(int i = 0; i < other_cars.size(); i++){
-    double gap = other_cars[i].s - ego_car.s;
 
+  double delta_s = cur_delta_s[ego_car.lane];
+  double delta_speed = cur_delta_speed[ego_car.lane];
+
+  if(delta_s > 100.0){
+    target_speed = maximum_speed;
   }
 
-  // Detremine car in front and speed gap for each lane
-  if(other_car_s > ego_car_s){
-    double gap = other_car_s - ego_car_s;
-    if(gap < car_in_front[lane]){
-      car_in_front[lane] = gap;
-      speedgap_in_front[lane] = maximum_speed - other_cars[j].speed;
-    }
+  else if(delta_s > 30.0){
+    target_speed = (ego_car.speed + delta_speed) + abs(delta_speed) * ((delta_s-30.0)/(100.0-30.0));
   }
 
+  else {
+    target_speed = ego_car.speed + delta_speed;
+  }
 }
-*/
