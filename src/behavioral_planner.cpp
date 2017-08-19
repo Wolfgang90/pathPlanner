@@ -31,9 +31,9 @@ Behavioral_planner::Planned Behavioral_planner::plan(int previous_target_lane_){
 
   determine_lane_costs();
 
-  cout << "Lane 0 cost: " << lane_cost[0] << endl;
-  cout << "Lane 1 cost: " << lane_cost[1] << endl;
-  cout << "Lane 2 cost: " << lane_cost[2] << endl;
+  //cout << "Lane 0 cost: " << lane_cost[0] << endl;
+  //cout << "Lane 1 cost: " << lane_cost[1] << endl;
+  //cout << "Lane 2 cost: " << lane_cost[2] << endl;
 
   Planned planned;
   determine_target_lane();
@@ -123,17 +123,17 @@ void Behavioral_planner::determine_lane_costs(){
   cur_delta_speed.assign(3, maximum_speed);
   cur_delta_d.assign(3, 0.0);
   for(int i = 0; i < other_cars.size(); i++){
-    int lane = other_cars[i].lane;
+    int lane_other = other_cars[i].lane;
     double ego_s = ego_car.s;
     double other_s = other_cars[i].s;
     other_s = handle_lap_change(ego_s, other_s);
     if(other_s > ego_s){
       double gap = other_s - ego_s;
-      if(gap < cur_delta_s[lane]){
-        cur_id[lane] = other_cars[i].id;
-        cur_delta_s[lane] = gap;
-        cur_delta_speed[lane] = other_cars[i].speed - ego_car.speed;
-        cur_delta_d[lane] = other_cars[i].d - (2.0 + 4.0 * lane);
+      if(gap < cur_delta_s[lane_other]){
+        cur_id[lane_other] = other_cars[i].id;
+        cur_delta_s[lane_other] = gap;
+        cur_delta_speed[lane_other] = other_cars[i].speed - ego_car.speed;
+        cur_delta_d[lane_other] = other_cars[i].d - (2.0 + 4.0 * lane_other);
       }
     }
   }
@@ -143,11 +143,11 @@ void Behavioral_planner::determine_lane_costs(){
     lane_cost[i] = lane_cost[i] + abs(cur_delta_speed[i]) * 10 / cur_delta_s[i];
     //In case the car is in a lane change to the right
     
-    if(cur_delta_d[i] > 0.4 && (i+1) < num_lanes-1){
+    if(cur_delta_d[i] > 0.5 && (i+1) < num_lanes-1){
       lane_cost[i+1] = lane_cost[i+1] + 4 * abs(cur_delta_speed[i]) * 10 / cur_delta_s[i];
     }
     //In case the car is in a lane change to the right
-    if(cur_delta_d[i] < -0.4 && (i-1) >= 0){
+    if(cur_delta_d[i] < -0.5 && (i-1) >= 0){
       lane_cost[i-1] = lane_cost[i-1] + 4 * abs(cur_delta_speed[i]) * 10 / cur_delta_s[i];
     }
   }
@@ -201,12 +201,15 @@ void Behavioral_planner::determine_target_speed(){
   double delta_s = cur_delta_s[ego_car.lane];
   double delta_speed = cur_delta_speed[ego_car.lane];
 
-  if(delta_s > 100.0){
+  cout << "delta_s: " << delta_s << endl;
+  double thresh_low = 15.0;
+  double thresh_high = 40.0;
+  if(delta_s > thresh_high){
     target_speed = maximum_speed;
   }
 
-  else if(delta_s > 30.0){
-    target_speed = (ego_car.speed + delta_speed) + abs(delta_speed) * ((delta_s-30.0)/(100.0-30.0));
+  else if(delta_s > thresh_low){
+    target_speed = (ego_car.speed + delta_speed) + abs(delta_speed) * ((delta_speed-thresh_low)/(thresh_high-thresh_low));
   }
 
   else {
