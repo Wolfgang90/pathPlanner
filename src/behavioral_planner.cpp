@@ -135,7 +135,6 @@ void Behavioral_planner::determine_lane_costs(){
     lane_cost[k] = lane_cost[k] + abs(k-current_lane) * 0.2;
   }
 
-  /*
   // Add cost for current status
   // Add costs for lane change
   cur_id.assign(3,999);
@@ -144,8 +143,11 @@ void Behavioral_planner::determine_lane_costs(){
   cur_delta_d.assign(3, 0.0);
   for(int i = 0; i < other_cars.size(); i++){
     int lane = other_cars[i].lane;
-    if(other_cars[i].s > ego_car.s){
-      double gap = other_cars[i].s - ego_car.s;
+    double ego_s = ego_car.s;
+    double other_s = other_cars[i].s;
+    other_s = handle_lap_change(ego_s, other_s);
+    if(other_s > ego_s){
+      double gap = other_s - ego_s;
       if(gap < cur_delta_s[lane]){
         cur_id[lane] = other_cars[i].id;
         cur_delta_s[lane] = gap;
@@ -168,7 +170,6 @@ void Behavioral_planner::determine_lane_costs(){
       lane_cost[i-1] = lane_cost[i-1] + 4 * cur_delta_speed[i] * 10 / cur_delta_s[i];
     }
   }
-  */
 }
 
 
