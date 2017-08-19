@@ -24,8 +24,14 @@ class Behavioral_planner{
     vector<double> dt_weights;
     map<int,double> lane_cost;
     int target_lane;
-    int previous_target_lane;
     double target_speed;
+    int previous_target_lane;
+    vector<int> cur_id;
+    vector<double> cur_delta_s;
+    vector<double> cur_delta_speed;
+    vector<double> cur_delta_d;
+
+    double handle_lap_change(double ego_s, double other_s);
 
   public:
     struct Planned{
