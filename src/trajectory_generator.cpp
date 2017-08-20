@@ -17,7 +17,7 @@ vector<vector<double>> Trajectory_generator::generate(Ego ego_car_, int target_l
     ref_vel = target_speed;
   }
 
-  // Create a list of widely spaced (x,y) waypoints, evenly spaced at 30m
+  // Create a list of widely spaced (x,y) waypoints, evenly spaced at 50m
   // They will be interpolated with a spline later
 
   vector<double> ptsx;
@@ -63,7 +63,7 @@ vector<vector<double>> Trajectory_generator::generate(Ego ego_car_, int target_l
     ptsy.push_back(ref_y);
   }
 
-  // In Frenet add evenly 30m spaced points ahead of the starting reference
+  // In Frenet add evenly 50m spaced points ahead of the starting reference
   Helper h;
   vector<double> next_wp0 = h.getXY(ego_car_.s + 50, (2+4*target_lane_), track.s, track.x, track.y);
   vector<double> next_wp1 = h.getXY(ego_car_.s + 100, (2+4*target_lane_), track.s, track.x, track.y);
