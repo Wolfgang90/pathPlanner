@@ -12,6 +12,7 @@
 
 using namespace std;
 
+
 class Car {
   protected:
     void calculate_lane();
@@ -27,11 +28,10 @@ class Car {
     int lane;
     double max_s;
     string lane_status;
-
     Car();
-
     void check_lane_change();
 };
+
 
 class Ego : public Car {
   public:
@@ -39,12 +39,12 @@ class Ego : public Car {
     double yaw_rad;
     vector<vector<double>> previous_path;
     int previous_size;
-
     Ego();
     void update(double x_, double y_, double s_, double d_, double yaw_deg_, double speed_, vector<double> previous_path_x_, vector<double> previous_path_y_);
     void predict(double dt);
     friend std::ostream& operator<<(std::ostream& os, const Ego &car);
 };
+
 
 class Other: public Car {
   public:

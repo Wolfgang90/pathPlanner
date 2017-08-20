@@ -1,6 +1,7 @@
 #include "trajectory_generator.h"
 
-Trajectory_generator::Trajectory_generator(Map& track_) : track(track_), target_speed(0.0), ref_vel(0.0), acc_factor(1.4), dec_factor(1.4) {};
+Trajectory_generator::Trajectory_generator(Map& track_) : track(track_), target_speed(0.0), ref_vel(0.0), acc_factor(1.2), dec_factor(1.4) {};
+
 
 vector<vector<double>> Trajectory_generator::generate(Ego ego_car_, int target_lane_, double target_speed_){
 

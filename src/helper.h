@@ -41,9 +41,7 @@ class Helper{
       double y = seg_y + d*sin(perp_heading);
 
       return {x,y};
-
     }
-
 };
 
 

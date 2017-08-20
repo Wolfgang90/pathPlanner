@@ -12,9 +12,11 @@ Car::Car(){
   lane_status = "in_lane";
 }
 
+
 void Car::calculate_lane(){
   lane = int(floor(d / 4.0));
 }
+
 
 void Car::check_lane_change(){
   if(d < 1.75 || d > 10.25){
@@ -34,6 +36,7 @@ Ego::Ego(){
   yaw_rad = 0.0;
   speed = 0.0;
 }
+
 
 void Ego::update(double x_, double y_, double s_, double d_, double yaw_deg_, double speed_, vector<double> previous_path_x_, vector<double> previous_path_y_){
   x = x_;
@@ -57,9 +60,11 @@ void Ego::update(double x_, double y_, double s_, double d_, double yaw_deg_, do
   calculate_lane();
 }
 
+
 void Ego::predict(double dt){
   s_predictions[dt] = fmod(s + speed/2.24 * dt,max_s);
 }
+
 
 std::ostream& operator<<(std::ostream& os, const Ego &car){
   os << "The values of car are:" << endl;
@@ -83,7 +88,6 @@ std::ostream& operator<<(std::ostream& os, const Ego &car){
   return os;
 }
 
-
 //--------------------------------------------------------
 
 Other::Other(vector<double> sensor_fusion_) {
@@ -96,6 +100,7 @@ Other::Other(vector<double> sensor_fusion_) {
   calculate_lane();
 }
 
+
 void Other::update(vector<double> sensor_fusion_){
   x = sensor_fusion_[1];
   y = sensor_fusion_[2];
@@ -105,9 +110,11 @@ void Other::update(vector<double> sensor_fusion_){
   calculate_lane();
 }
 
+
 void Other::predict(double dt){
   s_predictions[dt] = fmod(s + speed/2.24 * dt,max_s);
 }
+
 
 std::ostream& operator<<(std::ostream& os, const Other &car){
   os << "The values of car " << car.id << "  are:" << endl;
