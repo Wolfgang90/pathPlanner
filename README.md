@@ -2,7 +2,9 @@
 Self-Driving Car Engineer Nanodegree Program
 
 ## Project Writeup
-### 1 Program Structure
+
+### 1. Program Structure
+
 Beyond the main.cpp-file my program consists of the following modules:
 * `map.cpp`/`map.h`
   * Contains a class holding the map information
@@ -17,18 +19,21 @@ Beyond the main.cpp-file my program consists of the following modules:
 * `spline.h`
   * Holds the library to create and use splines
 
-### 2 Program Pipeline
+### 2. Program Pipeline
 
-Step 2.1 is performed before information from the simulator is received. All other steps are performed each time the simulator returns data to the program.
+Step `2.1. Pre-initialize classes` is performed before information from the simulator is received. All other steps are performed each time the simulator returns data to the program.
 
-#### 2.1 Pre-initialize classes
+#### 2.1. Pre-initialize classes
+
 In `main.cpp` 44-56 relevant classes and parameters are initialized
 
-#### 2.2 Initialize car information
+#### 2.2. Initialize car information
+
 In `main.cpp` 78 the class instance `ego_car` representing the own car is updated with the data received from the simulator.
 In `main.cpp` 88 a new `Behavioral_planner()` instance is generated with the own car information and the sensor fusion information of the other cars received from the simulator.
 
-#### 2.3 Plan lane and speed
+#### 2.3. Plan lane and speed
+
 In `main.cpp` 90 the planning process is triggered. In `behavioral_planner.cpp` 32 predictions for all cars in the future (1, 2, 3 seconds) are generated. In `behavioral_planner.cpp` 34 the costs for each lane are calculated. There are costs included for:
 * the car in front in predicted states based on the distance and speed gap `behavioral_planner.cpp` 106-109
 * cars in a safety area left and right of the car `behavioral_planner.cpp` 101-103. These costs are very high to prevent crashes
@@ -37,6 +42,22 @@ In `main.cpp` 90 the planning process is triggered. In `behavioral_planner.cpp` 
 * cars on the left and right in the current state which are off the middle of their lane and therefore are probably about to change lanes `behavioral_planner.cpp` 144-150
 
 Based on the cost and information of the cars in front, target lane and target speed are calculated and returned to `main.cpp` in `behavioral_planner.cpp` 39-41
+
+#### 2.4. Create trajectory
+
+In `main.cpp` 94 `Trajectory_generator::generate()` is called which creates the trajectory points which are subsequently returned to the simulator. 
+
+In `trajectory_generator.cpp` 8-18 `ref_vel`, which is the end velocity of the currently generated trajectory is calculated. 
+
+Aterwards points along the desired trajectory are defined in XY-coordinates in `trajectory_generator.cpp` 23-78. As starting points serve either two points which make the path tangent to the the car (if size of the previous path is almost empty) `trajectory_generator.cpp` 36-46 or the previous path points`trajectory_generator.cpp` 48-64. In addition to the starting points 3 points ahead are added in the distance of 50, 100 and 150 meters in `trajectory_generator.cpp` 66-78. If there is a lane change it is already accounted for after 50 meters. Eventually, the global XY-coorinates are transformed into local car XY-coordinates to prevent the subsequently applied spline to have multiple x-values in `trajectory_generator.cpp` 81-89.
+
+In the next step a spline is generated based on the local car XY-points in `trajectory_generator.cpp` 91-95.
+
+Eventually the trajectory points are generated in `trajectory_generator.cpp` 97-140. First all previous path points are added in `trajectory_generator.cpp` 102-105. Afterwards points are generated in local car coordinates in `trajectory_generator.cpp` 107-124 before they are transformed back into global XY-coorinates in `trajectory_generator.cpp` 126-131 and eventually pushed back to `main.cpp`.
+
+#### 2.5. Return trajectory points to the simulator
+
+Eventually, the trajectory points are returned to the simulator in
 
 
 
